@@ -2,6 +2,7 @@ package br.com.zup.criacaodeproposta.novaproposta;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,15 +16,20 @@ import javax.validation.constraints.NotNull;
 public class Proposta {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false)
     private @NotBlank @NotNull String documento;
+    @Column(nullable = false)
     private @NotNull @NotBlank @Email String email;
+    @Column(nullable = false)
     private @NotNull @NotBlank String nome;
+    @Column(nullable = false)
     private @NotBlank @NotNull String endereco;
+    @Column(nullable = false)
     private @NotNull @Min(0) BigDecimal salario;
 
     public Proposta(@NotBlank @NotNull String documento, @NotNull @NotBlank @Email String email,
             @NotNull @NotBlank String nome, @NotBlank @NotNull String endereco, @NotNull @Min(0) BigDecimal salario) {
-                this.documento = documento;
+                this.documento = limpaString(documento);
                 this.email = email;
                 this.nome = nome;
                 this.endereco = endereco;
@@ -58,4 +64,7 @@ public class Proposta {
         return this.salario;
     }
 
+    public static String limpaString(String string){
+        return string.replace(".", "").replace("-", "").replace("/", "").trim();
+    }
 }

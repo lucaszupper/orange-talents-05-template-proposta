@@ -11,10 +11,11 @@ import org.aspectj.lang.annotation.SuppressAjWarnings;
 import org.springframework.lang.NonNull;
 
 import br.com.zup.criacaodeproposta.validacao.CpfCnpjValidator;
+import br.com.zup.criacaodeproposta.validacao.UniqueValue;
 
 public class PropostaDto {
 
-    @CpfCnpjValidator @NotBlank @NotNull
+    @CpfCnpjValidator @NotBlank @NotNull @UniqueValue(domainClass = Proposta.class, fieldName = "documento")
     private String documento;
     @NotNull @NotBlank @Email
     private String email;
@@ -34,7 +35,7 @@ public class PropostaDto {
     private PropostaDto(){}
 
     public PropostaDto(String documento, String email, String nome, String endereco, BigDecimal salario) {
-        this.documento = documento;
+        this.documento = Proposta.limpaString(documento);
         this.email = email;
         this.nome = nome;
         this.endereco = endereco;
