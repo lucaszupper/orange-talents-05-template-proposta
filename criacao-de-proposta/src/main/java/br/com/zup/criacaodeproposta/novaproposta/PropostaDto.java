@@ -25,6 +25,7 @@ public class PropostaDto {
     private String endereco;
     @NotNull @Min(0)
     private BigDecimal salario;
+    private EstadoProposta estadoProposta;
 
 
     public Proposta toModel(){
@@ -48,6 +49,7 @@ public class PropostaDto {
         this.nome = proposta.getNome();
         this.endereco = proposta.getEndereco();
         this.salario = proposta.getSalario();
+        this.estadoProposta = proposta.getStatusProposta();
     }
 
     public String getDocumento() {
@@ -68,6 +70,10 @@ public class PropostaDto {
 
     public BigDecimal getSalario() {
         return this.salario;
+    }
+
+    public EstadoProposta getEstadoProposta() {
+        return this.estadoProposta;
     }
 
 }

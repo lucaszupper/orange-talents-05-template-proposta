@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +13,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import br.com.zup.criacaodeproposta.consultadadosfinanceiro.FormConsultaRestricao;
+import br.com.zup.criacaodeproposta.consultadadosfinanceiro.Resultado;
 
 @Entity
 public class Proposta {
@@ -26,6 +31,8 @@ public class Proposta {
     private @NotBlank @NotNull String endereco;
     @Column(nullable = false)
     private @NotNull @Min(0) BigDecimal salario;
+    @Enumerated(EnumType.STRING)
+    private EstadoProposta estadoProposta;
 
     public Proposta(@NotBlank @NotNull String documento, @NotNull @NotBlank @Email String email,
             @NotNull @NotBlank String nome, @NotBlank @NotNull String endereco, @NotNull @Min(0) BigDecimal salario) {
@@ -66,5 +73,21 @@ public class Proposta {
 
     public static String limpaString(String string){
         return string.replace(".", "").replace("-", "").replace("/", "").trim();
+    }
+
+    public EstadoProposta getStatusProposta() {
+        return this.estadoProposta;
+    }
+
+    public void atualizaEstadoProposta( FormConsultaRestricao restricao){
+        
+        if(restricao.getResultadoSolicitacao().equals(Resultado.COM_RESTRICAO)){
+            this.estadoProposta = EstadoProposta.NAO_ELEGIVEL;
+        }
+        
+        if(restricao.getResultadoSolicitacao().equals(Resultado.SEM_RESTRICAO)){
+            this.estadoProposta = EstadoProposta.ELEGIVEL;
+        }
+
     }
 }
