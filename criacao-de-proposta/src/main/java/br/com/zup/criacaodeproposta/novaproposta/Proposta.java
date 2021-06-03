@@ -9,11 +9,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import br.com.zup.criacaodeproposta.cadastracartao.Cartao;
 import br.com.zup.criacaodeproposta.consultadadosfinanceiro.FormConsultaRestricao;
 import br.com.zup.criacaodeproposta.consultadadosfinanceiro.Resultado;
 
@@ -33,6 +36,8 @@ public class Proposta {
     private @NotNull @Min(0) BigDecimal salario;
     @Enumerated(EnumType.STRING)
     private EstadoProposta estadoProposta;
+    @OneToOne(mappedBy = "proposta")
+    private Cartao cartao;
 
     public Proposta(@NotBlank @NotNull String documento, @NotNull @NotBlank @Email String email,
             @NotNull @NotBlank String nome, @NotBlank @NotNull String endereco, @NotNull @Min(0) BigDecimal salario) {
@@ -44,7 +49,7 @@ public class Proposta {
     }
 
     @Deprecated
-    private Proposta(){}
+    public Proposta(){}
 
     public Long getId() {
         return this.id;
