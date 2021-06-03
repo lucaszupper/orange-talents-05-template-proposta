@@ -21,6 +21,12 @@ public class FormVencimento {
         return this.dataDeCriacao;
     }
 
+    public FormVencimento(Vencimento vencimento){
+        this.id = vencimento.getId();
+        this.dia = vencimento.getDia();
+        this.dataDeCriacao = vencimento.getDataDeCriacao();
+    }
+
     public FormVencimento(String id, Integer dia, LocalDateTime dataDeCriacao) {
         this.id = id;
         this.dia = dia;

@@ -84,6 +84,14 @@ public class Proposta {
         return this.estadoProposta;
     }
 
+    public EstadoProposta getEstadoProposta() {
+        return this.estadoProposta;
+    }
+
+    public Cartao getCartao() {
+        return this.cartao;
+    }
+
     public void atualizaEstadoProposta( FormConsultaRestricao restricao){
         
         if(restricao.getResultadoSolicitacao().equals(Resultado.COM_RESTRICAO)){

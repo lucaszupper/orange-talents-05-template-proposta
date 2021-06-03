@@ -27,6 +27,15 @@ public class FormCartao {
         return new Cartao(this.id, this.emitidoEm,this.titular,this.limite, vencimento.toModel(), proposta);
     }
 
+    public FormCartao(Cartao cartao){
+        this.id = cartao.getId();
+        this.emitidoEm = cartao.getEmitidoEm();
+        this.titular = cartao.getTitular();
+        this.limite = cartao.getLimite();
+        this.idProposta = cartao.getProposta().getId();
+        this.vencimento = new FormVencimento(cartao.getVencimento());
+    }
+
     public FormCartao(String id, LocalDateTime emitidoEm, String titular, BigDecimal limite, Long idProposta, FormVencimento vencimento) {
         this.id = id;
         this.emitidoEm = emitidoEm;
