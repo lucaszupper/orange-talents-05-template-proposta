@@ -8,7 +8,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.zup</groupId>
-	<artifactId>criacao-de-proposta</artifactId>
+	<artifactId>proposta</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>criacao-de-proposta</name>
 	<description>Demo project for Spring Boot</description>
