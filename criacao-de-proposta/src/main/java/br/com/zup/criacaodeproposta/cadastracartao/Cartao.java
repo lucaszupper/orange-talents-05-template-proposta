@@ -3,13 +3,9 @@ package br.com.zup.criacaodeproposta.cadastracartao;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
+import br.com.zup.criacaodeproposta.bloqueiacartao.StatusCartao;
 import br.com.zup.criacaodeproposta.novaproposta.Proposta;
 
 
@@ -25,10 +21,17 @@ public class Cartao {
     private Proposta proposta;
     @OneToOne(cascade = CascadeType.MERGE)    
     private Vencimento vencimento;
+    @Enumerated(EnumType.STRING)
+    private StatusCartao statusCartao;
 
-
+    public void atualizaStatusCartao(StatusCartao statusCartao){
+        this.statusCartao = statusCartao;
+    }
     private Cartao(){}
 
+    public StatusCartao getStatusCartao() {
+        return statusCartao;
+    }
 
     public Cartao(String id, LocalDateTime emitidoEm, String titular, BigDecimal limite, Vencimento vencimento, Proposta proposta) {
         this.id = id;
@@ -37,6 +40,7 @@ public class Cartao {
         this.limite = limite;
         this.vencimento = vencimento;
         this.proposta = proposta;
+        this.statusCartao = StatusCartao.AUTORIZADO;
     }
 
 
