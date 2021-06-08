@@ -20,28 +20,29 @@ public class AssociaCartao {
 
     @Scheduled(cron = "0/15 * * * * * ")
     public void associar(){
-        logger.info("Iniciado o agendamento");
-        List<Proposta> propostas = propostaRepository.findByEstadoPropostaAndCartaoIsNull(EstadoProposta.ELEGIVEL);
-        if(propostas.size() <= 0) {
-            logger.info("Nao existem propostas para atualizar");
-            return; 
-        } 
+        try {
+            logger.info("Iniciado o agendamento");
+            List<Proposta> propostas = propostaRepository.findByEstadoPropostaAndCartaoIsNull(EstadoProposta.ELEGIVEL);
+            if(propostas.size() <= 0) {
+                logger.info("Nao existem propostas para atualizar");
+                return;
+            }
 
-        propostas.forEach(proposta -> {
-            FormConsultaRestricao consultaRestricao = new FormConsultaRestricao(proposta);
-            FormCartao formCartao = cartaoRequest.criaCartao(consultaRestricao);
-    
-            Cartao cartao = cartaoRepository.save(formCartao.toModel(propostaRepository));
-    
-            logger.info("Cartao numero: " + cartao.getId().substring(1,4) + "***" + cartao.getId().substring(cartao.getId().length() - 4, cartao.getId().length()) +
+            propostas.forEach(proposta -> {
+                FormConsultaRestricao consultaRestricao = new FormConsultaRestricao(proposta);
+                FormCartao formCartao = cartaoRequest.criaCartao(consultaRestricao);
+
+                Cartao cartao = cartaoRepository.save(formCartao.toModel(propostaRepository));
+
+                logger.info("Cartao numero: " + cartao.getId().substring(1,4) + "***" + cartao.getId().substring(cartao.getId().length() - 4, cartao.getId().length()) +
                         ", Proposta de Id: " + cartao.getProposta().getId() + " Cadastrado com Sucesso!!" );
-        });
+            });
 
+            logger.info("Concluido o metodo");
+        } catch (Exception exception) {
+            logger.error("Nao foi possivel comunicar com o servidor");
+        }
 
-
-
-
-        logger.info("Concluido o metodo");
 
     }
 
