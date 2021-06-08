@@ -1,5 +1,5 @@
 package br.com.zup.criacaodeproposta.bloqueiacartao;
 
 public enum StatusCartao {
-    BLOQUEADO, AUTORIZADO, VENCIDO, CANCELADO
+    AUTORIZADO, BLOQUEADO, CANCELADO, EM_ANALISE, VENCIDO, AGUARDANDO_BLOQUEIO
 }

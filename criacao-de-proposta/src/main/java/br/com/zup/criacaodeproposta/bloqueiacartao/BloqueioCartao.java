@@ -21,7 +21,7 @@ public class BloqueioCartao {
         this.ipRequisicao = ipRequisicao;
         this.userAgent = userAgent;
         this.cartao = cartao;
-        cartao.atualizaStatusCartao(StatusCartao.BLOQUEADO);
+        cartao.atualizaStatusCartao(StatusCartao.AGUARDANDO_BLOQUEIO);
     }
 
     public Long getId() {

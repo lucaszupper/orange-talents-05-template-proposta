@@ -22,9 +22,13 @@ public class BloqueiaCartaoController {
     private CartaoRepository cartaoRepository;
     @Autowired
     private BloqueioCartaoRepository bloqueioCartaoRepository;
+    @Autowired
+    private AvisaBloqueioRequest avisaBloqueio;
+
 
     @PostMapping("/{idCartao}")
     public ResponseEntity<?> bloqueia(@PathVariable(name = "idCartao") String idCartao, @RequestHeader(value = "User-Agent") String userAgent, HttpServletRequest request){
+
         Optional<Cartao> cartaoOptional = cartaoRepository.findById(idCartao);
         if(!cartaoOptional.isPresent()){
             return ResponseEntity.notFound().build();
@@ -34,6 +38,8 @@ public class BloqueiaCartaoController {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(erro);
         }
             BloqueioCartao bloqueioCartao = bloqueioCartaoRepository.save(new BloqueioCartao(request.getRemoteAddr(),userAgent, cartaoOptional.get()));
+
+        avisaBloqueio.atualizaBloqueio(cartaoOptional.get());
 
         return ResponseEntity.ok().build();
     }
