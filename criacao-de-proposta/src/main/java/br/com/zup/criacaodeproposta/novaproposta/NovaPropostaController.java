@@ -7,6 +7,10 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import br.com.zup.criacaodeproposta.metricas.Metricas;
+import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Metric;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +29,8 @@ public class NovaPropostaController {
     
     private PropostaRepository propostaRepository;
     private ConsultaFinanceira consultaFinanceira;
+    @Autowired
+    private Metricas metricas;
 
 
     public NovaPropostaController(PropostaRepository propostaRepository, ConsultaFinanceira consultaFinanceira){
@@ -35,14 +41,14 @@ public class NovaPropostaController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> cria(@RequestBody @Valid PropostaDto request, UriComponentsBuilder builder){
-        
+
         Optional<List<Proposta>> optional = propostaRepository.findByDocumento(Proposta.limpaString(request.getDocumento()) );
         if(optional.get().size() > 0){
             Erro erro = new Erro("documento", "Ja existe proposta para esse Documento");
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(erro);
         }                
         Proposta proposta = propostaRepository.save(request.toModel());
-
+        metricas.meuContador();
         FormConsultaRestricao restricao = consultaFinanceira.consultaRestricao(new FormConsultaRestricao(proposta));
         proposta.atualizaEstadoProposta(restricao);
         
