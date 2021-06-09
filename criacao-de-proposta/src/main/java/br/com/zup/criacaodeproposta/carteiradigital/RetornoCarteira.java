@@ -1,4 +1,4 @@
-package br.com.zup.criacaodeproposta.associapaypal;
+package br.com.zup.criacaodeproposta.carteiradigital;
 
 public class RetornoCarteira {
     private String resultado;

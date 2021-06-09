@@ -1,4 +1,4 @@
-package br.com.zup.criacaodeproposta.associapaypal;
+package br.com.zup.criacaodeproposta.carteiradigital;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

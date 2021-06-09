@@ -1,4 +1,4 @@
-package br.com.zup.criacaodeproposta.associapaypal;
+package br.com.zup.criacaodeproposta.carteiradigital;
 
 import br.com.zup.criacaodeproposta.cadastracartao.Cartao;
 

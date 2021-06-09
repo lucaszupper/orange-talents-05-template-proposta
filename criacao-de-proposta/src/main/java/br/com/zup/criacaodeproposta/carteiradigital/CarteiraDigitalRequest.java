@@ -1,9 +1,4 @@
-package br.com.zup.criacaodeproposta.associapaypal;
-
-import br.com.zup.criacaodeproposta.cadastracartao.Cartao;
-
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+package br.com.zup.criacaodeproposta.carteiradigital;
 
 public class CarteiraDigitalRequest {
 

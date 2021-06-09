@@ -1,4 +1,4 @@
-package br.com.zup.criacaodeproposta.associapaypal;
+package br.com.zup.criacaodeproposta.carteiradigital;
 
 import br.com.zup.criacaodeproposta.cadastracartao.Cartao;
 import br.com.zup.criacaodeproposta.cadastracartao.CartaoRepository;
@@ -15,8 +15,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/paypal")
-public class PaypalController {
+@RequestMapping("/api/carteiradigital")
+public class CarteiraDigitalController {
 
     @Autowired
     private CartaoRepository cartaoRepository;
@@ -31,18 +31,18 @@ public class PaypalController {
         if(!cartaoOptional.isPresent()){
             return ResponseEntity.notFound().build();
         }
-        Optional<CarteiraDigital> optionalCarteiraDigital = carteiraDigitalRepository.findByCartaoIdAndTipoCarteira(idCartao,TipoCarteira.PAYPAL);
+        Optional<CarteiraDigital> optionalCarteiraDigital = carteiraDigitalRepository.findByCartaoIdAndTipoCarteira(idCartao, carteiraDigitalDto.getCarteira());
         if(optionalCarteiraDigital.isPresent()){
             Erro erro = new Erro("carteira", "Ja existe associacao desse cartao para essa carteira");
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(erro);
         }
-        String idSistemaExterno = cadastraCarteira.cadastra(new CarteiraDigitalDto(carteiraDigitalDto.getEmail(), TipoCarteira.PAYPAL), idCartao);
+        String idSistemaExterno = cadastraCarteira.cadastra(new CarteiraDigitalDto(carteiraDigitalDto.getEmail(), carteiraDigitalDto.getCarteira()), idCartao);
         if(Objects.isNull(idSistemaExterno)){
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
         }
 
-        CarteiraDigital carteiraDigital = carteiraDigitalRepository.save(new CarteiraDigital(idSistemaExterno, cartaoOptional.get(), TipoCarteira.PAYPAL));
-        URI uri = builder.path("/api/paypal/" + idCartao + "/{id}").buildAndExpand(carteiraDigital.getId()).toUri();
+        CarteiraDigital carteiraDigital = carteiraDigitalRepository.save(new CarteiraDigital(idSistemaExterno, cartaoOptional.get(), carteiraDigitalDto.getCarteira()));
+        URI uri = builder.path("/api/carteiradigital" + idCartao + "/{id}").buildAndExpand(carteiraDigital.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new CarteiraDigitalRequest(carteiraDigital));
     }
