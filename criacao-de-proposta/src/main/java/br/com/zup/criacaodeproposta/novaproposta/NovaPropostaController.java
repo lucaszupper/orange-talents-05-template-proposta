@@ -9,6 +9,8 @@ import javax.validation.Valid;
 
 import br.com.zup.criacaodeproposta.metricas.Metricas;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Metric;
 import org.springframework.http.HttpStatus;
@@ -32,16 +34,22 @@ public class NovaPropostaController {
     @Autowired
     private Metricas metricas;
 
+    public final Tracer tracer;
 
-    public NovaPropostaController(PropostaRepository propostaRepository, ConsultaFinanceira consultaFinanceira){
+
+    public NovaPropostaController(PropostaRepository propostaRepository, ConsultaFinanceira consultaFinanceira, Tracer tracer){
         this.propostaRepository = propostaRepository;
         this.consultaFinanceira = consultaFinanceira;
+        this.tracer = tracer;
     }
 
     @PostMapping
     @Transactional
     public ResponseEntity<?> cria(@RequestBody @Valid PropostaDto request, UriComponentsBuilder builder){
-
+        Span activeSpan = tracer.activeSpan();
+        activeSpan.setBaggageItem("user.email", request.getEmail());
+        activeSpan.setTag("user.email", request.getEmail());
+        activeSpan.log("Iniciado processo de requisicao");
         Optional<List<Proposta>> optional = propostaRepository.findByDocumento(Proposta.limpaString(request.getDocumento()) );
         if(optional.get().size() > 0){
             Erro erro = new Erro("documento", "Ja existe proposta para esse Documento");
