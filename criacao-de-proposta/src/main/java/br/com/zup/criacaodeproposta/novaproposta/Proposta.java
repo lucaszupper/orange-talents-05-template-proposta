@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 import br.com.zup.criacaodeproposta.cadastracartao.Cartao;
 import br.com.zup.criacaodeproposta.consultadadosfinanceiro.FormConsultaRestricao;
 import br.com.zup.criacaodeproposta.consultadadosfinanceiro.Resultado;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 public class Proposta {
@@ -41,7 +42,7 @@ public class Proposta {
 
     public Proposta(@NotBlank @NotNull String documento, @NotNull @NotBlank @Email String email,
             @NotNull @NotBlank String nome, @NotBlank @NotNull String endereco, @NotNull @Min(0) BigDecimal salario) {
-                this.documento = limpaString(documento);
+                this.documento = encrypt(limpaString(documento));
                 this.email = email;
                 this.nome = nome;
                 this.endereco = endereco;
@@ -103,4 +104,9 @@ public class Proposta {
         }
 
     }
+
+    private String encrypt(String string){
+        return new BCryptPasswordEncoder().encode(string);
+    }
+
 }
